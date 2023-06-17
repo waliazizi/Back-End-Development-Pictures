@@ -35,7 +35,10 @@ def count():
 ######################################################################
 @app.route("/picture", methods=["GET"])
 def get_pictures():
-    pass
+    all_pictures=[]
+    for pictures in data:
+        all_pictures.append(pictures)
+    return all_pictures
 
 ######################################################################
 # GET A PICTURE
@@ -44,15 +47,28 @@ def get_pictures():
 
 @app.route("/picture/<int:id>", methods=["GET"])
 def get_picture_by_id(id):
-    pass
+    for picture_by_id in data:
+        if picture_by_id['id']== int(id):
+            return jsonify(picture_by_id)
+    return jsonify({'error': 'Not found'}), 404
+    
 
 
 ######################################################################
 # CREATE A PICTURE
 ######################################################################
-@app.route("/picture", methods=["POST"])
+@app.route("/picture/", methods=["POST"])
 def create_picture():
-    pass
+    new_data = request.get_json()
+    
+
+    for picture in data:
+        if picture['id'] == new_data['id']:
+            return {"Message": "picture with id {picture['id']} already present"}
+    
+    data.append(new_data)
+    return jsonify(new_data), 201
+
 
 ######################################################################
 # UPDATE A PICTURE
